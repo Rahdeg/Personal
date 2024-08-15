@@ -1,0 +1,97 @@
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+} from "@/components/ui/sheet";
+import { insertOrderSchema } from "@/db/schema";
+import { z } from "zod";
+import { useOpenOrder } from "../hooks/use-open-order";
+import { Loader2 } from "lucide-react";
+import { useConfirm } from "@/hooks/use-confirm";
+import OrderForm from "./order-form";
+import { useGetOrder } from "../api/use-get-order";
+import { useUpdateOrderStatus } from "../api/use-update-order";
+import { useDeleteOrder } from "../api/use-delete-order";
+
+export const UpdateOrderSheet = () => {
+    const { isOpen, onClose, id } = useOpenOrder();
+    const [ConfirmDialog, confirm] = useConfirm(
+        "Are you sure?",
+        "You are about to delete this order"
+    )
+
+    const orderQuery = useGetOrder(id);
+    const editMutation = useUpdateOrderStatus(id);
+    const deleteMutation = useDeleteOrder(id);
+
+    const isPending = editMutation.isPending || deleteMutation.isPending;
+
+    const isLoading = orderQuery.isLoading;
+
+    const formSchema = insertOrderSchema.pick({
+        status: true
+    });
+
+    type FormValues = z.input<typeof formSchema>;
+
+
+
+
+    const onSubmit = (values: FormValues) => {
+        editMutation.mutate(values, {
+            onSuccess: () => {
+                onClose();
+            },
+        });
+    };
+
+    const onDelete = async () => {
+        const ok = await confirm();
+
+        if (ok) {
+            deleteMutation.mutate(undefined, {
+                onSuccess: () => {
+                    onClose();
+                }
+            })
+        }
+
+    }
+
+    const defaultValues = orderQuery.data ? {
+        status: orderQuery.data.status
+    } : {
+        status: "",
+    }
+
+
+
+    return (
+        <>
+            <ConfirmDialog />
+            <Sheet open={isOpen} onOpenChange={onClose}>
+                <SheetContent className="space-y-4">
+                    <SheetHeader>
+                        <SheetTitle>
+                            Update Order
+                        </SheetTitle>
+                        <SheetDescription>
+                            Update your  order status .
+                        </SheetDescription>
+                    </SheetHeader>
+                    {
+                        isLoading ? (
+                            <div className=" absolute inset-0 flex items-center justify-center">
+                                <Loader2 className=" size-4 text-muted-foreground animate-spin" />
+                            </div>
+                        ) : (<OrderForm onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} id={id} onDelete={onDelete} />)
+                    }
+
+                </SheetContent>
+            </Sheet>
+        </>
+
+    );
+};

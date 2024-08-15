@@ -1,0 +1,1 @@
+ALTER TABLE "orders" ADD COLUMN "totalAmount" integer DEFAULT 0;

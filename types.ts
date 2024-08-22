@@ -23,6 +23,7 @@ export interface Product {
   quantity: number;
   isFeatured: boolean;
   isArchived: boolean;
+  averageRating: number;
   createdAt: string | null;
 }
 

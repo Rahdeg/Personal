@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google"
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { siteConfig } from "@/config/site";
 import { QueryProvider } from "@/providers/query-provider";
 import { SheetProvider } from "@/providers/sheet-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { appWithTranslation } from 'next-i18next';
+
 
 const inter = FontSans({ subsets: ["latin"], variable: "--font-sans" });
-
 
 export const metadata: Metadata = {
   title: {
@@ -22,7 +23,8 @@ export const metadata: Metadata = {
       href: "/logo.svg"
     }
   ]
-}
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,11 +38,13 @@ export default function RootLayout({
           <QueryProvider>
             <SheetProvider />
             <Toaster />
+            {/* Wrap the app with I18nextProvider */}
             {children}
+
           </QueryProvider>
         </body>
       </html>
-    </ClerkProvider>
 
+    </ClerkProvider>
   );
 }

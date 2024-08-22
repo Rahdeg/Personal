@@ -20,32 +20,32 @@ export const UpdateOrderSheet = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
         "You are about to delete this order"
-    )
+    );
 
     const orderQuery = useGetOrder(id);
     const editMutation = useUpdateOrderStatus(id);
     const deleteMutation = useDeleteOrder(id);
 
     const isPending = editMutation.isPending || deleteMutation.isPending;
-
     const isLoading = orderQuery.isLoading;
 
     const formSchema = insertOrderSchema.pick({
-        status: true
+        status: true,
     });
 
     type FormValues = z.input<typeof formSchema>;
 
-
-
-
     const onSubmit = (values: FormValues) => {
-        editMutation.mutate(values, {
+        // Ensure values.status is a valid value before mutation
+        const status = values.status ?? "Processing"; // Fallback to a default value
+
+        editMutation.mutate({ status }, {
             onSuccess: () => {
                 onClose();
             },
         });
     };
+
 
     const onDelete = async () => {
         const ok = await confirm();
@@ -54,19 +54,18 @@ export const UpdateOrderSheet = () => {
             deleteMutation.mutate(undefined, {
                 onSuccess: () => {
                     onClose();
-                }
-            })
+                },
+            });
         }
+    };
 
-    }
-
-    const defaultValues = orderQuery.data ? {
-        status: orderQuery.data.status
-    } : {
-        status: "",
-    }
-
-
+    const defaultValues: FormValues = orderQuery.data
+        ? {
+            status: orderQuery.data.status ?? "Pending", // Ensure a valid default value
+        }
+        : {
+            status: "Pending", // Provide a fallback for undefined or null
+        };
 
     return (
         <>
@@ -74,24 +73,24 @@ export const UpdateOrderSheet = () => {
             <Sheet open={isOpen} onOpenChange={onClose}>
                 <SheetContent className="space-y-4">
                     <SheetHeader>
-                        <SheetTitle>
-                            Update Order
-                        </SheetTitle>
-                        <SheetDescription>
-                            Update your  order status .
-                        </SheetDescription>
+                        <SheetTitle>Update Order</SheetTitle>
+                        <SheetDescription>Update your order status.</SheetDescription>
                     </SheetHeader>
-                    {
-                        isLoading ? (
-                            <div className=" absolute inset-0 flex items-center justify-center">
-                                <Loader2 className=" size-4 text-muted-foreground animate-spin" />
-                            </div>
-                        ) : (<OrderForm onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} id={id} onDelete={onDelete} />)
-                    }
-
+                    {isLoading ? (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Loader2 className="size-4 text-muted-foreground animate-spin" />
+                        </div>
+                    ) : (
+                        <OrderForm
+                            onSubmit={onSubmit}
+                            disabled={isPending}
+                            defaultValues={defaultValues}
+                            id={id}
+                            onDelete={onDelete}
+                        />
+                    )}
                 </SheetContent>
             </Sheet>
         </>
-
     );
 };

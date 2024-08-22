@@ -30,7 +30,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
             return toast.error("Please select lower Quantity")
         }
         cart.addItem({ ...data, colors: selectedColor, sizes: selectedSize, quantity: value });
-        console.log({ ...data, colors: selectedColor, sizes: selectedSize, quantity: value })
+
         previewModal.onClose();
 
     }

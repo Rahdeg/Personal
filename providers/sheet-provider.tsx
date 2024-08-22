@@ -16,6 +16,8 @@ import { NewExpensisSheet } from "@/features/expensis/components/new-expensis-sh
 import { EditAdminSheet } from "@/features/admin/components/edit-admin-sheet";
 import { NewAdminSheet } from "@/features/admin/components/new-admin-sheet";
 import { UpdateOrderSheet } from "@/features/orders/components/update-order-sheet";
+import { I18nextProvider } from "react-i18next";
+import i18n from "@/components/lang";
 // import { NewTransactionSheet } from "@/features/transactions/components/new-transaction-sheet";
 // import { EditTransactionSheet } from "@/features/transactions/components/edit-transaction-sheet";
 // import { SubscriptionModal } from "@/features/subscriptions/components/subscription-modal";
@@ -44,6 +46,7 @@ export const SheetProvider = () => {
             <NewAdminSheet />
             <UpdateOrderSheet />
             <PreviewModal />
+            <I18nextProvider i18n={i18n} />
 
         </>
     )

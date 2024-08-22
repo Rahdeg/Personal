@@ -41,7 +41,6 @@ export const ToggleCard = ({
     const isPending = editMutation.isPending || deleteMutation.isPending;
 
     const onChange = (newValue: boolean) => {
-        // console.log([newValue]);
         editMutation.mutate({ isAdmin: newValue });
     };
 

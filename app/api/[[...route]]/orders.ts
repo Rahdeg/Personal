@@ -10,7 +10,7 @@ import {
 } from "@/db/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
@@ -23,6 +23,7 @@ type OrderItem = {
   productName: string;
   size: string | null;
   color: string | null;
+  quantity: number | null;
 };
 
 // type Order = {
@@ -113,13 +114,15 @@ const app = new Hono()
             'productId', ${orderItems.productId},
             'productName', ${products.name},
             'size', ${orderItems.size},
-            'color', ${orderItems.color}
+            'color', ${orderItems.color},
+            'quantity', ${orderItems.quantity}
           ))::jsonb`,
       })
       .from(orders)
       .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
       .leftJoin(products, eq(products.id, orderItems.productId))
       .groupBy(orders.id)
+      .orderBy(desc(orders.createdAt))
       .execute();
 
     const ordersWithProducts = data.map((order) => ({
@@ -218,6 +221,7 @@ const app = new Hono()
           .select()
           .from(orders)
           .where(eq(orders.id, orderId))
+          .orderBy(desc(orders.createdAt))
           .execute();
 
         if (order.length === 0) {
@@ -296,13 +300,18 @@ const app = new Hono()
               'color', ${orderItems.color},
               'quantity', ${orderItems.quantity},
               'amount', ${orderItems.amount},
-              'images', ${images.url}
+              'isReviewed', ${orderItems.isReviewed},
+              'image', (
+                SELECT ${images.url}
+                FROM ${images}
+                WHERE ${images.productId} = ${orderItems.productId}
+                LIMIT 1
+              )
             ))::jsonb`,
           })
           .from(orders)
           .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
           .leftJoin(products, eq(products.id, orderItems.productId))
-          .leftJoin(images, eq(images.productId, orderItems.productId))
           .where(eq(orders.userId, userId))
           .groupBy(
             orders.id,
@@ -312,6 +321,7 @@ const app = new Hono()
             orders.totalAmount,
             orders.createdAt
           )
+          .orderBy(desc(orders.createdAt))
           .execute();
 
         if (ordersResult.length === 0) {

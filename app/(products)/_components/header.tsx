@@ -1,9 +1,11 @@
+"use client"
 import React from 'react';
 import Logo from './logo';
 import Navigation from './navigation';
 import Profile from './profile';
 
 const Header = () => {
+
     return (
         <div className='fixed top-0 left-0 w-full bg-white shadow-md z-50'>
             <div className='flex py-5 border-b-2 w-full'>

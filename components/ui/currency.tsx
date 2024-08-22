@@ -1,11 +1,10 @@
 "use client"
 
+
+import useAppState from "@/hooks/app-states";
 import { useEffect, useState } from "react";
 
-export const formatter = new Intl.NumberFormat("en-NG", {
-  style: "currency",
-  currency: "NGN"
-});
+
 
 interface CurrencyProps {
   value?: string | number
@@ -15,6 +14,12 @@ const Currency: React.FC<CurrencyProps> = ({
   value
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const { currency: myCurrency } = useAppState();
+
+  const formatter = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: myCurrency
+  });
 
   useEffect(() => {
     setIsMounted(true)

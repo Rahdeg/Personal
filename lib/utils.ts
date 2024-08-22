@@ -2,7 +2,6 @@ import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
 import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 import { Product } from "@/types";
-import { useGetAdmins } from "@/features/admin/api/use-get-admins";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,10 +15,13 @@ export function convertAmountToMiliunits(amount: number) {
   return Math.round(amount * 1000);
 }
 
-export function formatCurrency(value: number) {
+export function formatCurrency(
+  value: number,
+  currency: string = "NGN"
+): string {
   return Intl.NumberFormat("en-NG", {
     style: "currency",
-    currency: "NGN",
+    currency: currency,
     minimumFractionDigits: 2,
   }).format(value);
 }
@@ -138,15 +140,15 @@ export function transformImages(product: Product): any {
   };
 }
 
-export function formatAmountToNairaKobo(amount: number): string {
-  // Create a new Intl.NumberFormat instance for Nigerian Naira currency
+export function formatAmount(amount: number, currency: string = "NGN"): string {
+  // Create a new Intl.NumberFormat instance for the specified currency
   const formatter = new Intl.NumberFormat("en-NG", {
     style: "currency",
-    currency: "NGN",
+    currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
-  // Format the amount
+  // Format the amount (assuming the amount is in the smallest unit like kobo, cents, etc.)
   return formatter.format(amount / 100);
 }

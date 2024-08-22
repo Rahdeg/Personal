@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 import { VariantProps, cva } from "class-variance-authority";
 
-import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
+import { cn, } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
 
 import { Skeleton } from "./skeleton";

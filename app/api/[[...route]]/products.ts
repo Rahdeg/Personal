@@ -8,10 +8,11 @@ import {
   categories,
   sizes,
   colors,
+  reviews,
 } from "@/db/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
@@ -66,6 +67,7 @@ const app = new Hono()
           isFeatured: products.isFeatured,
           isArchived: products.isArchived,
           createdAt: products.createdAt,
+          averageRating: sql<number>`COALESCE(AVG(${reviews.rating}), 0)`,
           sizes: sql<string[]>`array_agg(distinct ${sizes.value})`,
           colors: sql<string[]>`array_agg(distinct ${colors.value})`,
           images: sql<string[]>`array_agg(distinct ${images.url})`,
@@ -79,6 +81,7 @@ const app = new Hono()
           )
         )
         .leftJoin(categories, eq(categories.id, products.categoryId))
+        .leftJoin(reviews, eq(reviews.productId, products.id))
         .leftJoin(productSizes, eq(productSizes.productId, products.id))
         .leftJoin(sizes, eq(sizes.id, productSizes.sizeId))
         .leftJoin(productColors, eq(productColors.productId, products.id))
@@ -97,6 +100,7 @@ const app = new Hono()
           products.isArchived,
           products.createdAt
         )
+        .orderBy(desc(products.createdAt))
         .execute();
 
       const productsWithDetails = data.map((product) => ({
@@ -122,11 +126,6 @@ const app = new Hono()
     ),
     clerkMiddleware(),
     async (c) => {
-      // const { categoryId, isFeatured } = c.req.valid("query");
-
-      // Convert isFeatured to boolean if it is present
-      // const isFeaturedFilter = isFeatured === "true" ? true : undefined;
-
       const data = await db
         .select({
           id: products.id,
@@ -163,6 +162,7 @@ const app = new Hono()
           products.isArchived,
           products.createdAt
         )
+        .orderBy(desc(products.createdAt))
         .execute();
 
       const productsWithDetails = data.map((product) => ({

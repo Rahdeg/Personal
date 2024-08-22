@@ -2,7 +2,7 @@ import { db } from "@/db/drizzle";
 import { admin, insertAdminSchema } from "@/db/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
@@ -54,7 +54,8 @@ const app = new Hono()
           isAdmin: admin.isAdmin,
         })
         .from(admin)
-        .where(eq(admin.id, id));
+        .where(eq(admin.id, id))
+        .orderBy(desc(admin.createdAt));
 
       if (!data) {
         return c.json({ error: "Not found" }, 404);

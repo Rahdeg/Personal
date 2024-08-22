@@ -25,3 +25,39 @@ export const extendedOrderSchema = insertOrderSchema
     id: true,
   })
   .merge(additionalFieldsSchema);
+
+export interface OrderItem {
+  productId: string;
+  productName: string;
+  size: string | null;
+  color: string | null;
+  quantity: number;
+  amount: number;
+  isReviewed: boolean;
+  image: string;
+}
+
+export interface OrderResponse {
+  id: string;
+  status:
+    | "Pending"
+    | "Processing"
+    | "Shipped"
+    | "Delivered"
+    | "Canceled"
+    | null;
+  trackingNumber: string | null;
+  userId: string;
+  totalAmount: number | null;
+  createdAt: string | null;
+  orderItems: OrderItem[];
+}
+
+export interface MappedOrderItem extends OrderItem {
+  orderId: string;
+  createdAt: string | null;
+  status: string | null;
+  totalAmount: number | null;
+  trackingNumber: string | null;
+  userId: string;
+}

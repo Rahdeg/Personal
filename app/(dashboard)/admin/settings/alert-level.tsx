@@ -9,7 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import useStockAlert from "@/hooks/stock-level";
+import useAppState from "@/hooks/app-states";
+
 
 
 
@@ -25,7 +26,7 @@ export const AlertLevel = ({
 
     const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
 
-    const { stockLevelAlert, setStockLevelAlert } = useStockAlert()
+    const { stockLevelAlert, setStockLevelAlert } = useAppState()
 
 
 

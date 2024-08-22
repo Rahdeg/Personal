@@ -8,7 +8,8 @@ import { InferResponseType } from "hono";
 import { ArrowUpDown } from "lucide-react";
 import { format } from "date-fns";
 import Actions from "./actions";
-import { formatAmountToNairaKobo, formatCurrency } from "@/lib/utils";
+import { formatAmount } from "@/lib/utils";
+import useAppState from "@/hooks/app-states";
 
 
 export type ResponseType = InferResponseType<typeof client.api.orders.$get, 200>["data"][0];
@@ -52,43 +53,11 @@ export const columns: ColumnDef<ResponseType>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-x-2">
         {
-          row.original.products.map((product) => product.productName).join(', ')
+          row.original.products.map((product) => `${product.productName}(${product.quantity})`).join(', ')
         }
       </div>
     )
   },
-  // {
-  //   accessorKey: "products",
-  //   header: "Color",
-  //   cell: ({ row }) => (
-
-
-  //     <div className="grid grid-cols-2  gap-1">
-  //       {row.original.products.map((product, index) => (
-  //         <button
-  //           key={index}
-  //           className="h-6 w-6 rounded-full border"
-  //           style={{ backgroundColor: product.color! }}
-  //         >
-
-  //         </button>
-  //       ))}
-  //     </div>
-  //   )
-  // },
-  // {
-  //   accessorKey: "products",
-  //   header: "Size",
-  //   cell: ({ row }) => (
-
-
-  //     <div className="flex items-center gap-x-2">
-  //       {
-  //         row.original.products.map((product) => product.size).join(', ')
-  //       }
-  //     </div>
-  //   )
-  // },
   {
     accessorKey: "phone",
     header: "Phone"
@@ -122,20 +91,22 @@ export const columns: ColumnDef<ResponseType>[] = [
     }
   },
   {
-    accessorKey: "trackingNumber",
-    header: "Tracking Number"
+    accessorKey: "id",
+    header: "Order ID"
   },
   {
     accessorKey: "totalAmount",
     header: "Total Amount",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-x-2">
-        {
-          formatAmountToNairaKobo(row.original.totalAmount!)
+    cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { currency } = useAppState(); // Access the currency
 
-        }
-      </div>
-    )
+      return (
+        <div className="flex items-center gap-x-2">
+          {formatAmount(row.original.totalAmount!, currency)} {/* Use currency */}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "address",
@@ -154,6 +125,4 @@ export const columns: ColumnDef<ResponseType>[] = [
     id: "actions",
     cell: ({ row }) => <Actions id={row.original.id} />
   },
-
-
 ];

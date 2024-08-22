@@ -2,18 +2,15 @@
 import { formatDateRange } from '@/lib/utils';
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
-// import { useGetSummary } from '@/features/summary/api/use-get-summary';
 import { FaPiggyBank } from "react-icons/fa"
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6"
 import { DataCard, DataCardLoading } from './ui/data-card';
-import { ProductDataCard } from './ui/data-product-card ';
 import { useGetSummary } from '@/features/summary/api/use-get-summary';
-import useStockAlert from '@/hooks/stock-level';
+import useAppState from '@/hooks/app-states';
+
 
 export const DataGrid = () => {
     const { data, isLoading } = useGetSummary();
-
-    console.log(data, "feee");
 
     const params = useSearchParams();
     const to = params.get("to") || undefined;
@@ -21,7 +18,7 @@ export const DataGrid = () => {
 
     const dateRangeLabel = formatDateRange({ to, from });
 
-    const { setTotalAvailableStocks } = useStockAlert()
+    const { setTotalAvailableStocks } = useAppState()
 
 
     useEffect(() => {

@@ -9,19 +9,12 @@ import { ArrowUpDown } from "lucide-react";
 import Actions from "./actions";
 import { format } from 'date-fns'
 import { formatCurrency } from "@/lib/utils";
+import useStockAlert from "@/hooks/app-states";
 
 
-interface ProductInitialData {
-  name?: string;
-  categoryId?: string;
-  price?: string;
-  isFeatured?: boolean;
-  isArchived?: boolean;
-  colorIds?: string[];
-  sizeIds?: string[];
-}
 
-export type ResponseType = InferResponseType<typeof client.api.products.$get, 200>["data"][0];
+export type ResponseType = InferResponseType<typeof client.api.products.manage.$get, 200>["data"][0];
+
 
 export const columns: ColumnDef<ResponseType>[] = [
   {
@@ -89,20 +82,7 @@ export const columns: ColumnDef<ResponseType>[] = [
       )
     }
   },
-  // {
-  //   accessorKey: "costPrice",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         Cost Price
-  //         <ArrowUpDown className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     )
-  //   }
-  // },
+
   {
     accessorKey: "sellingPrice",
     header: ({ column }) => {
@@ -116,9 +96,16 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => (
-      <p>{formatCurrency(row.original.sellingPrice)}</p>
-    )
+    cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { currency } = useStockAlert(); // Access the currency
+
+      return (
+        <div className="flex items-center gap-x-2">
+          {formatCurrency(row.original.sellingPrice, currency)} {/* Use currency */}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "colors",

@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -110,6 +110,7 @@ export const productRelations = relations(products, ({ one, many }) => ({
   colors: many(productColors),
   images: many(images),
   orderItems: many(orderItems),
+  reviews: many(reviews), // Add relation to reviews
 }));
 
 // Product Sizes table for many-to-many relationship
@@ -205,6 +206,7 @@ export const orderItems = pgTable("order_items", {
   size: text("size").default(""),
   quantity: integer("quantity").default(1),
   amount: integer("amount").default(0),
+  isReviewed: boolean("isReviewed").default(false),
 });
 
 export const orderItemRelations = relations(orderItems, ({ one }) => ({
@@ -214,6 +216,26 @@ export const orderItemRelations = relations(orderItems, ({ one }) => ({
   }),
   product: one(products, {
     fields: [orderItems.productId],
+    references: [products.id],
+  }),
+}));
+
+export const reviews = pgTable("reviews", {
+  id: text("id").primaryKey(),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(), // Enforce rating range in application logic
+  comment: text("comment").default(""),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  product: one(products, {
+    fields: [reviews.productId],
     references: [products.id],
   }),
 }));

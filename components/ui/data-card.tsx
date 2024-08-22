@@ -1,11 +1,13 @@
 import { IconType } from "react-icons";
 import { VariantProps, cva } from "class-variance-authority";
 
-import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
+import { cn, formatPercentage } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
 
 import { Skeleton } from "./skeleton";
 import { CountUp } from "../count-up";
+import useAppState from "@/hooks/app-states";
+
 
 
 const boxVariant = cva(
@@ -56,6 +58,21 @@ interface DataCardProps extends BoxVariants, IconVariants {
 
 
 export const DataCard = ({ icon: Icon, title, value = 0, dateRange, percentageChange = 0, variant }: DataCardProps) => {
+
+    const { currency: Mycurrency } = useAppState();
+
+    function formatCurrency(
+        value: number,
+        currency: string = Mycurrency
+    ): string {
+        return Intl.NumberFormat("en-NG", {
+            style: "currency",
+            currency: currency,
+            minimumFractionDigits: 2,
+        }).format(value);
+    }
+
+
     return (
         <Card className=" border-none drop-shadow-sm rounded-2xl">
             <CardHeader className=" flex flex-row items-center justify-between gap-x-4">

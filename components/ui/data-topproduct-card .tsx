@@ -11,6 +11,8 @@ import { useGetProductWithIds } from "@/features/products/api/use-get-products-w
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import useAppState from "@/hooks/app-states";
+
 
 
 const boxVariant = cva(
@@ -69,7 +71,7 @@ interface DataCardProps extends BoxVariants, IconVariants {
 
 export const TopProductDataCard = ({ title, value = 0, dateRange, percentageChange = 0, variant, data = [] }: DataCardProps) => {
 
-
+    const { currency } = useAppState();
 
 
 
@@ -108,7 +110,7 @@ export const TopProductDataCard = ({ title, value = 0, dateRange, percentageChan
                         <Button size="lg" variant="outline" key={idx} className=" flex items-center justify-between gap-x-3  w-full  p-3">
                             <p>{item?.categoryName}</p>
                             <p> QTY: {item?.totalQuantity}</p>
-                            <p> {formatCurrency(item?.sellingPrice * item?.totalQuantity)}</p>
+                            <p> {formatCurrency(item?.sellingPrice * item?.totalQuantity, currency)}</p>
                         </Button>
                     ))
                 }

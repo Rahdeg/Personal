@@ -10,6 +10,7 @@ import webhooks from "./webhooks";
 import expensis from "./expensis";
 import admin from "./admin";
 import summary from "./summary";
+import review from "./review";
 
 export const runtime = "nodejs";
 
@@ -26,7 +27,8 @@ const routes = app
   .route("/webhooks", webhooks)
   .route("/expensis", expensis)
   .route("/admin", admin)
-  .route("/summary", summary);
+  .route("/summary", summary)
+  .route("/review", review);
 
 export const GET = handle(app);
 export const POST = handle(app);

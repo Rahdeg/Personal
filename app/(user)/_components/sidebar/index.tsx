@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { useSidebar } from '@/store/use-sidebar'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Info, ListOrdered, User } from 'lucide-react'
+import { Info, ListOrdered, PersonStanding, User } from 'lucide-react'
 
 const Sidebar = () => {
     const { collapsed } = useSidebar((state) => state);
@@ -49,6 +49,25 @@ const Sidebar = () => {
                                 !collapsed && (
                                     <p className=" truncate">
                                         Orders
+                                    </p>
+                                )
+                            }
+                        </div>
+                    </Link>
+                </Button>
+
+                <Button
+                    variant="ghost"
+                    asChild
+                    className={cn("w-full h-12", collapsed ? "justify-center" : "justify-start", pathname.includes("reviews") && "bg-accent")}
+                >
+                    <Link href="/reviews">
+                        <div className={cn(" flex items-center w-full gap-x-4", collapsed && "justify-center")}>
+                            <PersonStanding />
+                            {
+                                !collapsed && (
+                                    <p className=" truncate">
+                                        Pending Reviews
                                     </p>
                                 )
                             }

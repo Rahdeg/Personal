@@ -2,8 +2,12 @@ import { format } from "date-fns";
 
 import { formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import useAppState from "@/hooks/app-states";
+
 
 export const CustomTooltip = ({ active, payload }: any) => {
+
+  const { currency, } = useAppState();
   if (!active) return null;
 
   const date = payload[0].payload.date;
@@ -25,7 +29,7 @@ export const CustomTooltip = ({ active, payload }: any) => {
             </p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(income)}
+            {formatCurrency(income, currency)}
           </p>
         </div>
         <div className="flex items-center justify-betwen gap-x-4">
@@ -36,7 +40,7 @@ export const CustomTooltip = ({ active, payload }: any) => {
             </p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(expenses * -1)}
+            {formatCurrency(expenses * -1, currency)}
           </p>
         </div>
       </div>

@@ -6,9 +6,8 @@ import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import axios from "axios";
 import { useCheckout } from "./use-checkout";
-import { Product } from "@/types";
+
 
 
 
@@ -43,20 +42,6 @@ const Summary = () => {
         }));
 
         checkout.mutate({ items: productItems });
-        // const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-        //     productIds: items.map((item) => item.id),
-        // });
-
-
-        // console.log("ids", { productDetails: items.map((item) => { item.id, item.colors, item.sizes }) })
-
-        // console.log("ids", {
-        //     productDetails: items.map((item) => ({
-        //         id: item.id,
-        //         colors: item.colors,
-        //         sizes: item.sizes
-        //     }))
-        // });
     }
 
     return (

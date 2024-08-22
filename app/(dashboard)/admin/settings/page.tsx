@@ -6,6 +6,8 @@ import { ToggleCard } from './toogle-card';
 import { AlertLevel } from './alert-level';
 import { useNewAdmin } from '@/features/admin/hooks/use-new-admin';
 import { useGetAdmins } from '@/features/admin/api/use-get-admins';
+import { CurrencyType } from './currency-type';
+import { LanguageSelector } from './language-selector';
 
 
 const SettingsPage = () => {
@@ -82,7 +84,21 @@ const SettingsPage = () => {
                             label="Stock alert level"
 
                         />
+
+
                     </div>
+
+                    <div className="my-4">
+
+                        <Button variant="outline" className='text-xl font-bold text-blue-900  mb-3'>
+                            Currency
+                        </Button>
+
+
+                        <CurrencyType label='Set Currency ' />
+                    </div>
+
+
                 </CardContent>
             </Card>
 

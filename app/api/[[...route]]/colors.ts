@@ -2,7 +2,7 @@ import { db } from "@/db/drizzle";
 import { colors, insertColorSchema } from "@/db/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
@@ -22,7 +22,8 @@ const app = new Hono()
         name: colors.name,
         value: colors.value,
       })
-      .from(colors);
+      .from(colors)
+      .orderBy(desc(colors.createdAt));
     return c.json({ data });
   })
   .get(

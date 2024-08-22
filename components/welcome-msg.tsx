@@ -1,6 +1,7 @@
 "use client"
 import { useGetAdmins } from '@/features/admin/api/use-get-admins';
-import useStockAlert from '@/hooks/stock-level';
+import useAppState from '@/hooks/app-states';
+
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation';
 import React from 'react'
@@ -9,7 +10,7 @@ const WelcomeMsg = () => {
 
     const { user, isLoaded } = useUser();
 
-    const stockLevel = useStockAlert();
+    const stockLevel = useAppState();
 
     const router = useRouter();
 

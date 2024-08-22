@@ -9,6 +9,7 @@ const TrendingProducts = () => {
     const products = productsQuery.data;
 
 
+
     const scrollRef = useRef<HTMLDivElement>(null);
     const [scrollPosition, setScrollPosition] = useState(0);
 

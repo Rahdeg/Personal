@@ -2,12 +2,19 @@ import { format } from "date-fns";
 
 import { formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import useAppState from "@/hooks/app-states";
+
 
 export const CategoryTooltip = ({ active, payload }: any) => {
+
+  const { currency, setCurrency } = useAppState();
+
   if (!active) return null;
+
 
   const name = payload[0].payload.name;
   const value = payload[0].value;
+
 
   return (
     <div className="rounded-sm bg-white shadow-sm border overflow-hidden">
@@ -24,7 +31,7 @@ export const CategoryTooltip = ({ active, payload }: any) => {
             </p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(value * 1)}
+            {formatCurrency(value * 1, currency)}
           </p>
         </div>
       </div>

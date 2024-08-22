@@ -77,22 +77,6 @@ app.post("/", async (c) => {
         return c.json({ error: "Order not found or not updated" }, 404);
       }
 
-      //update OrderItems
-
-      // const orderItemsResult = await db
-      //   .select()
-      //   .from(orderItems)
-      //   .where(eq(orderItems.orderId, session?.metadata?.orderId!));
-
-      // const productIds = orderItemsResult.map(
-      //   (orderItem) => orderItem.productId
-      // );
-
-      // await db
-      //   .update(products)
-      //   .set({ isArchived: true })
-      //   .where(inArray(products.id, productIds));
-
       // Get product IDs and quantities from orderItems
       const productsToUpdate = await db
         .select({

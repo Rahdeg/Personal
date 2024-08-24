@@ -38,6 +38,10 @@ const routes = [
         label: "Expensis"
     },
     {
+        href: "/admin/users",
+        label: "Users"
+    },
+    {
         href: "/admin/settings",
         label: "Settings"
     },

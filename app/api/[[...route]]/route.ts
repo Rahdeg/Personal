@@ -11,6 +11,7 @@ import expensis from "./expensis";
 import admin from "./admin";
 import summary from "./summary";
 import review from "./review";
+import users from "./users";
 
 export const runtime = "nodejs";
 
@@ -28,7 +29,8 @@ const routes = app
   .route("/expensis", expensis)
   .route("/admin", admin)
   .route("/summary", summary)
-  .route("/review", review);
+  .route("/review", review)
+  .route("/users", users);
 
 export const GET = handle(app);
 export const POST = handle(app);

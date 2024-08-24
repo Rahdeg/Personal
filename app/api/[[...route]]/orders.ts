@@ -26,16 +26,6 @@ type OrderItem = {
   quantity: number | null;
 };
 
-// type Order = {
-//   id: string;
-//   isPaid: boolean | null;
-//   phone: string | null;
-//   address: string | null;
-//   totalAmount: number | null;
-//   createdAt: Date | null;
-//   products: OrderItem[];
-// };
-
 const additionalFieldsSchema = z.object({
   products: z.array(z.string()),
 });
@@ -72,6 +62,7 @@ const app = new Hono()
         .insert(orders)
         .values({
           id: createId(),
+          trackingNumber: createId(),
           userId: userId,
           isPaid: values.isPaid,
           phone: values.phone,
@@ -187,7 +178,6 @@ const app = new Hono()
           .update(orders)
           .set({
             status,
-            trackingNumber: createId(),
             updatedAt: new Date(),
             deliveredAt: status === "Delivered" ? new Date() : null,
             shippedAt: status === "Shipped" ? new Date() : null,

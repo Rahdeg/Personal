@@ -27,7 +27,7 @@ const SizePage = () => {
     const paidOrdersLength = orders.filter(order => order.isPaid === true).length;
     const unPaidOrdersLength = orders.filter(order => order.isPaid === false).length;
 
-
+    console.log(orders, "orders");
 
     if (orderQuery.isLoading) {
         return (
@@ -63,13 +63,11 @@ const SizePage = () => {
                         <Button variant="outline" className='text-base text-blue-900 '>
                             <p className=' mr-2'>Paid Order</p>   ({paidOrdersLength})
                         </Button>
-                        <Button className='text-base '>
-                            <p className=''>Track Orders</p>
-                        </Button>
+
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <DataTable columns={columns} data={orders} filterKey='trackingNumber' disabled={disabled} onDelete={
+                    <DataTable columns={columns} data={orders} filterKey='status' disabled={disabled} onDelete={
                         (row) => {
                             const ids = row.map((r) => r.original.id);
                             deleteOrders.mutate({ ids });

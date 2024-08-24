@@ -7,26 +7,22 @@ import React from 'react'
 import { DataTable } from '@/components/data-table'
 import { columns } from './columns'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useNewColor } from '@/features/colors/hooks/use-new-color'
-import { useGetColors } from '@/features/colors/api/use-get-colors'
-import { useBulkDeleteColor } from '@/features/colors/api/use-bulk-delete-color'
+import { useGetUsers } from '@/features/users/api/use-get-users'
 
 
 
 
 
-const ColorPage = () => {
 
-    const { onOpen } = useNewColor();
-    const colorsQuery = useGetColors();
-    const colors = colorsQuery.data || [];
-    const deleteColors = useBulkDeleteColor();
+const UsersPage = () => {
 
-    const disabled = colorsQuery.isLoading || deleteColors.isPending;
+    const usersQuery = useGetUsers();
+    const users = usersQuery.data || [];
 
+    const disabled = usersQuery.isLoading
 
 
-    if (colorsQuery.isLoading) {
+    if (usersQuery.isLoading) {
         return (
             <div className=' max-w-screen-2xl mx-auto w-full pb-10 -mt-24'>
                 <Card className='border-none drop-shadow-sm'>
@@ -51,20 +47,12 @@ const ColorPage = () => {
             <Card className='border-none drop-shadow-sm'>
                 <CardHeader className='gap-y-2 lg:flex-row lg:items-center lg:justify-between'>
                     <CardTitle className=' text-xl line-clamp-1'>
-                        Color page
+                        Users
                     </CardTitle>
-                    <Button onClick={onOpen}>
-                        <Plus className=' size-4 mr-2' />
-                        Add new
-                    </Button>
+
                 </CardHeader>
                 <CardContent>
-                    <DataTable columns={columns} data={colors} filterKey='value' disabled={disabled} onDelete={
-                        (row) => {
-                            const ids = row.map((r) => r.original.id);
-                            deleteColors.mutate({ ids });
-                        }
-                    } />
+                    <DataTable columns={columns} data={users} filterKey='username' disabled={disabled} onDelete={() => { }} />
                 </CardContent>
             </Card>
 
@@ -72,4 +60,4 @@ const ColorPage = () => {
     )
 }
 
-export default ColorPage
+export default UsersPage

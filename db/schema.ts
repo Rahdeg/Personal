@@ -25,6 +25,8 @@ export const users = pgTable("users", {
   username: text("username").notNull(),
   firstname: text("firstname").notNull(),
   lastname: text("lastname").notNull(),
+  phone: text("phone").default("").notNull(),
+  address: text("address").default("").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -242,6 +244,7 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
 
 // Schemas
 export const insertCategorySchema = createInsertSchema(categories);
+export const insertUsersSchema = createInsertSchema(users);
 export const insertSizeSchema = createInsertSchema(sizes);
 export const insertColorSchema = createInsertSchema(colors);
 export const insertExpensisSchema = createInsertSchema(expensis);

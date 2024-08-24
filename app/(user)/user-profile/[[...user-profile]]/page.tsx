@@ -2,6 +2,7 @@
 
 
 import Header from '@/app/(products)/_components/header';
+import { UpdateUser } from '@/features/users/components/user-update-card';
 import { UserProfile } from '@clerk/nextjs';
 import { Inbox, ListOrdered } from 'lucide-react';
 import { FaCalculator } from 'react-icons/fa';
@@ -11,15 +12,6 @@ const MyAccount = () => {
         <FaCalculator className=' size-4' />
     )
 }
-
-const AccountPage = () => {
-    return (
-        <div>
-            <h1>Custom Account Page</h1>
-            <p>This is the custom Account page</p>
-        </div>
-    );
-};
 
 // const MyOrders = () => {
 //     return (
@@ -50,7 +42,7 @@ const UserProfilePage = () => (
                     labelIcon={<MyAccount />}
                     url="account"
                 >
-                    <AccountPage />
+                    <UpdateUser />
                 </UserProfile.Page>
 
 
